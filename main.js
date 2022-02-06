@@ -1,12 +1,13 @@
-BTS_Butter ="";
-Harry_potter ="";
+BTS_Butter="";
+Harry_potter_theme_song="";
 rightWrist_x = 0;
 rightWrist_y = 0;
 leftWrist_x = 0;
 leftWrist_y = 0;
+scoreleftWrist = 0;
+song_name = "";
 
-function setup()
-{
+function setup(){
     canvas = createCanvas(600,530);
     canvas.center();
 
@@ -17,34 +18,45 @@ function setup()
     poseNet.on('pose',gotposes);
 }
 
-function preload()
-{
+function preload(){
     BTS_Butter = loadSound("music2.mp3");
-    Harry_potter = loadSound("music.mp3");
+    Harry_potter_theme_song = loadSound("music.mp3");
 }
 
-function draw()
-{
+function draw(){
     image(video,0,0,600,530);
-}
-function play()
-{
-    song.play(music.mp3);
-    song.setVolume(1);
-    song.rate(1);
+
+    fill("#00ff00");
+    stroke("#ff0000");
+
+    song_name = BTS_Butter.isPlaying();
+    console.log(song_name);
+
+    if(scoreleftWrist > 0.2)
+    {
+        circle(leftWrist_x,leftWrist_y,20);
+        Harry_potter_theme_song.stop();
+        if(song_name == false){
+            BTS_Butter.play();
+        }
+        else{
+            console.log("Song Name:  BTS  BUTTER Song");
+            document.getElementById("song_id").innerHTML = "Song Name: BTS Butter Song";
+        }
+    }
 }
 
-function modelLoaded()
-{
+function modelLoaded(){
     console.log("poseNet Is Initialized");
 }
 
-function gotposes(results)
-{
-    if(results.length > 0)
-    {
+function gotposes(results){
+    if(results.length > 0){
         console.log(results);
-         
+
+        scoreleftWrist = results[0].pose.keypoints[9].score;
+        console.log(scoreleftWrist);
+
         leftWrist_x = results[0].pose.leftWrist.x;
         leftWrist_y = results[0].pose.leftWrist.y;
         console.log("leftWrist_x = "+leftWrist_x+" leftWrist_y = "+leftWrist_y);
@@ -54,4 +66,3 @@ function gotposes(results)
         console.log("rightWrist_x = "+rightWrist_x+" rightWrist_y = "+rightWrist_y);
     }
 }
-
