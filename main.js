@@ -5,7 +5,9 @@ rightWrist_y = 0;
 leftWrist_x = 0;
 leftWrist_y = 0;
 scoreleftWrist = 0;
-song_name = "";
+scorerightWrist = 0;
+song_BTS_Butter = "";
+song_Harry_potter_theme = "";
 
 function setup(){
     canvas = createCanvas(600,530);
@@ -19,7 +21,7 @@ function setup(){
 }
 
 function preload(){
-    BTS_Butter = loadSound("music2.mp3");
+   BTS_Butter = loadSound("music2.mp3");
     Harry_potter_theme_song = loadSound("music.mp3");
 }
 
@@ -29,19 +31,33 @@ function draw(){
     fill("#00ff00");
     stroke("#ff0000");
 
-    song_name = BTS_Butter.isPlaying();
-    console.log(song_name);
+    song_BTS_Butter = BTS_Butter.isPlaying();
+    console.log(song_BTS_Butter);
 
-    if(scoreleftWrist > 0.2)
-    {
+    song_Harry_potter_theme = Harry_potter_theme_song.isPlaying();
+    console.log(song_Harry_potter_theme);
+
+    if(scoreleftWrist > 0.2){
         circle(leftWrist_x,leftWrist_y,20);
         Harry_potter_theme_song.stop();
-        if(song_name == false){
+        if( song_BTS_Butter == false){
             BTS_Butter.play();
         }
         else{
-            console.log("Song Name:  BTS  BUTTER Song");
+            console.log("Song Name: BTS Buter song");
             document.getElementById("song_id").innerHTML = "Song Name: BTS Butter Song";
+        }
+    }
+
+    if(scorerightWrist > 0.2){
+        circle(rightWrist_x,rightWrist_y,20);
+        BTS_Butter.stop();
+        if(song_Harry_potter_theme == false){
+            Harry_potter_theme_song.play();
+        }
+        else{
+            console.log("Song Name: Harry Potter Theme Song");
+            document.getElementById("song_id").innerHTML = "Song Name: Harry Potter Theme Song";
         }
     }
 }
@@ -56,6 +72,9 @@ function gotposes(results){
 
         scoreleftWrist = results[0].pose.keypoints[9].score;
         console.log(scoreleftWrist);
+
+        scorerightWrist = results[0].pose.keypoints[10].score;
+        console.log(scorerightWrist);
 
         leftWrist_x = results[0].pose.leftWrist.x;
         leftWrist_y = results[0].pose.leftWrist.y;
